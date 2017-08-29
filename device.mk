@@ -38,12 +38,16 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    Snap
+#    Snap
 
 # Charger
 PRODUCT_PACKAGES += \
     charger \
     charger_res_images
+
+# Bluetooth
+PRODUCT_PACKAGES += \
+    libbt-vendor
 
 # Torch
 PRODUCT_PACKAGES += \
@@ -272,17 +276,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perfservscntbl.txt:system/etc/perfservscntbl.txt
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml
-    
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.fingerprint.xml:system/etc/permissions/android.hardware.fingerprint.xml
-    
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
-    $(LOCAL_PATH)/configs/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
-    $(LOCAL_PATH)/configs/hostapd/hostapd.deny:system/etc/hostapd/hostapd.deny
-
+    $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml    
 
 # MTK Helpers 
 PRODUCT_PACKAGES += \
@@ -304,7 +298,16 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
     gps.mt6795 \
-    libcurl
+    libcurl \
+    curl
+
+# Default OMX service to non-Treble
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.media.treble_omx=false
+
+# HIDL
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/hidl/manifest.xml:system/vendor/manifest.xml
 
 # Mediaserver with system group
 PRODUCT_COPY_FILES += \

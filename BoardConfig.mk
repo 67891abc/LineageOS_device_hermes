@@ -74,7 +74,7 @@ BOARD_MKBOOTIMG_ARGS := \
 	--board 67891abc
 
 #prebuilt
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/kernel
+#TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/kernel
 
 #source
 TARGET_KERNEL_SOURCE := kernel/xiaomi/hermes
@@ -87,6 +87,9 @@ BLOCK_BASED_OTA := false
 
 # Disable memcpy opt (for audio libraries)
 TARGET_CPU_MEMCPY_OPT_DISABLE := true
+
+# HIDL Manifest
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/hidl/manifest.xml
 
 # Display
 USE_OPENGL_RENDERER := true
@@ -211,8 +214,8 @@ endif
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
 
 # SELinux
-BOARD_SEPOLICY_DIRS := \
-    device/xiaomi/herems/sepolicy
+#BOARD_SEPOLICY_DIRS := \
+#    device/xiaomi/herems/sepolicy
 
 # Seccomp Filter
 BOARD_SECCOMP_POLICY := \
@@ -242,10 +245,4 @@ TARGET_BOOTANIMATION_HALF_RES := true
 MALLOC_SVELTE := true
 BOARD_GLOBAL_CFLAGS += -DDECAY_TIME_DEFAULT=0
 #BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
-
-#Hack for prebuilt kernel
-ifeq ($(TARGET_DEVICE),X3)
-$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
-$(shell touch $(OUT)/obj/KERNEL_OBJ/usr/export_includes)
-endif
 

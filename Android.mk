@@ -16,7 +16,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),X3)
+ifeq ($(TARGET_DEVICE),hermes)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 

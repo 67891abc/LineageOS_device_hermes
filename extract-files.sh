@@ -1,12 +1,12 @@
 #!/bin/bash
 
-VENDOR=LeEco
-DEVICE=X3
+VENDOR=xiaomi
+DEVICE=hermes
 
 BASE=../../../vendor/$VENDOR/$DEVICE/proprietary
 
 echo "Pulling $DEVICE files..."
-for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
+for FILE in `cat proprietary-blobs.txt | grep -v ^# | grep -v ^$`; do
     DIR=`dirname $FILE`
     if [ ! -d $BASE/$DIR ]; then
         mkdir -p $BASE/$DIR
