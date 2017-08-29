@@ -12,9 +12,12 @@ import init.common_svc.rc
 import init.ssd.rc
 	
 
-# init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
-# import init.modem.rc
-# *** DO NOT import the new rc file after this line ***
+on late-fs
+    # boot time fs tune
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/iosched/slice_idle 0
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk0/queue/nr_requests 256
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -72,7 +75,7 @@ export LD_PRELOAD "libmtk_symbols.so"
 # mount different fs start
 
 on charger
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/system /system ro wait
+    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/system /system ro
     start fuelgauged
     start kpoc_charger
     start servicemanager
@@ -109,6 +112,8 @@ on post-fs
 
     chown system system /protect_s
     chmod 0770 /protect_s
+mkdir /protect_s/properties 0770 system system
+
     # once everything is setup, no need to modify /
     mount rootfs rootfs / ro remount
 
@@ -160,6 +165,12 @@ on post-fs
     chown root system /proc/mtprof/cputime
     chown root system /proc/mtprof/reboot_pid
     chown system system /proc/mtprof/gpu_freq
+
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+
+    # Mark wifi driver as unloaded - "ok" indicates loaded
+    setprop wlan.driver.status not_ok
 
 on post-fs-data
 
@@ -336,7 +347,7 @@ on post-fs-data
     #Accdet
     chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
     #VideoCodec
-    chmod 0660 /dev/Vcodec
+    chmod 0666 /dev/Vcodec
     chown media system /dev/Vcodec
 
     #MJC
@@ -470,6 +481,9 @@ on post-fs-data
     chmod 0660 /dev/mtk_disp_mgr
     chown system graphics /dev/mtk_disp_mgr
 
+chmod 0660 /sys/devices/platform/mtk_disp_mgr.0/rgb
+    chown system system /sys/devices/platform/mtk_disp_mgr.0/rgb
+
     chmod 0660 /dev/mtkfb_vsync
     chown system graphics /dev/mtkfb_vsync
 
@@ -510,7 +524,7 @@ on post-fs-data
     chown media media /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
 
     # SMI
-    chmod 0660 /dev/MTK_SMI
+    chmod 0666 /dev/MTK_SMI
     chown media media /dev/MTK_SMI
 
     # RRC
@@ -728,6 +742,12 @@ on boot
     chmod 0660 /dev/ttyGS3
     chown system radio /dev/ttyGS3
 
+on property:sys.boot_completed=1
+    # end boot time fs tune
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0/queue/nr_requests 128
+    write /sys/block/mmcblk0/queue/iostats 1
+
 on property:vold.decrypt=trigger_reset_main
     start stop_modem
     setprop service.nvram_init 0
@@ -872,11 +892,6 @@ service pq /system/bin/pq
     user system
     group system graphics
 
-service aal /system/bin/aal
-    class main
-    user system
-    group system graphics
-
 # FOTA upgrade
 service rbfota /system/bin/fota1
     class main
@@ -890,7 +905,7 @@ service autokd /system/bin/autokd
     user system
     group system
 
-service p2p_supplicant /system/bin/wpa_supplicant \
+service p2p_supplicant /system/vendor/bin/hw/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf -N \
     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -dd \
@@ -905,7 +920,7 @@ service p2p_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service wpa_supplicant /system/bin/wpa_supplicant \
+service wpa_supplicant /system/vendor/bin/hw/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin -dd \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
     -O/data/misc/wifi/sockets -g@android:wpa_wlan0
@@ -1055,7 +1070,7 @@ service cmmb /system/bin/cmmbsp
 service enableswap /system/bin/sh /enableswap.sh
     class core
     oneshot
-    seclabel u:r:enableswap:s0
+    #seclabel u:r:enableswap:s0
 
 service matv /system/bin/matv
     class main
@@ -1203,6 +1218,7 @@ service s62xd /system/bin/s62xd
     user compass
     group system
     class main
+
 service ami304d /system/bin/ami304d
     user system
     group system
@@ -1395,9 +1411,3 @@ service guiext-server /system/bin/guiext-server
 service kpoc_charger /system/bin/kpoc_charger
     class charger
 
-# Program binary service
-service program_binary /system/bin/program_binary_service
-    class late_start
-    user system
-    group graphics
-    oneshot
