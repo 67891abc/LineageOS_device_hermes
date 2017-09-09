@@ -127,7 +127,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     lib_driver_cmd_mt66xx \
     libwpa_client \
-    hostapd \
     wpa_supplicant
 
 # WiFi HIDL HAL
@@ -180,25 +179,12 @@ PRODUCT_PACKAGES += \
     fibmap.f2fs \
     fsck.f2fs \
     mkfs.f2fs \
-    make_ext4fs \
     resize2fs \
     setup_fs \
     ext4_resize \
     libext2_blkid \
     libext2_uuid_static  \
     superumount 
-    
-# exFAT
-PRODUCT_PACKAGES += \
-    mount.exfat \
-    fsck.exfat \
-    mkfs.exfat
-
-# NTFS
-PRODUCT_PACKAGES += \
-    fsck.ntfs \
-    mkfs.ntfs \
-    mount.ntfs
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
@@ -218,7 +204,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ramdisk/init.mt6795.usb.rc:root/init.mt6795.usb.rc \
     $(LOCAL_PATH)/ramdisk/init.project.rc:root/init.project.rc \
     $(LOCAL_PATH)/ramdisk/ueventd.mt6795.rc:root/ueventd.mt6795.rc \
-    $(LOCAL_PATH)/ramdisk/init.volte.rc:root/init.volte.rc \
     $(LOCAL_PATH)/ramdisk/init.mal.rc:root/init.mal.rc \
     $(LOCAL_PATH)/ramdisk/init.usb.configfs:root/init.usb.configfs.rc \
     $(LOCAL_PATH)/ramdisk/init.trustonic.rc:root/init.trustonic.rc \
@@ -414,4 +399,5 @@ PRODUCT_PACKAGES += \
     libm4u \
     libbwc
 
-
+# Include explicitly to work around Facelock issues
+PRODUCT_PACKAGES += libprotobuf-cpp-full
