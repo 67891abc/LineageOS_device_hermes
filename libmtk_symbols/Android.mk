@@ -9,7 +9,8 @@ LOCAL_SRC_FILES := \
     mtk_ui.cpp \
     mtk_omx.cpp \
     icu55.c \
-    ssl.c 
+    crypto.c \
+    ssl.c
 
 # only for 32bit libraries
 LOCAL_SRC_FILES_32 := mtk_string.cpp
@@ -19,7 +20,7 @@ LOCAL_SRC_FILES_64 := mtk_parcel.cpp
 LOCAL_SRC_FILES_64 += mtk_wvm64.cpp
 
 
-LOCAL_SHARED_LIBRARIES := libbinder libutils liblog libgui libui \
+LOCAL_SHARED_LIBRARIES := libbinder libutils liblog libgui libssl libui \
                           libicuuc libicui18n libcrypto libstagefright_foundation
 LOCAL_C_INCLUDES += frameworks/av/media/mtp/ system/core/include/ frameworks/rs/server/ frameworks/av/include/ hardware/libhardware/include/
 LOCAL_MODULE := libmtk_symbols
