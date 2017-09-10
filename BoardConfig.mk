@@ -252,3 +252,10 @@ ro.setupwizard.enterprise_mode=1 \
 ro.com.android.dataroaming=false \
 net.tethering.noprovisioning=true \
 ro.setupwizard.rotation_locked=true
+
+# For MTK New Symbols
+TARGET_INCLUDE_XLOG_SYMBOLS := true
+TARGET_INCLUDE_AUDIO_SYMBOLS := true
+TARGET_INCLUDE_GPS_SYMBOLS := true
+TARGET_INCLUDE_UI_SYMBOLS := true
+TARGET_INCLUDE_OMX_SYMBOLS := true
