@@ -126,8 +126,14 @@ PRODUCT_PACKAGES += \
 # Wifi
 PRODUCT_PACKAGES += \
     lib_driver_cmd_mt66xx \
+    libwifi-hal-mt66xx \
+    wifi_hal \
     libwpa_client \
-    wpa_supplicant
+    hostapd \
+    hostapd_cli \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 # WiFi HIDL HAL
 PRODUCT_PACKAGES += \
@@ -214,6 +220,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    device/xiaomi/hermes/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
@@ -326,6 +333,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml    
 
+# Telecom
+PRODUCT_COPY_FILES += \
+    device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml \
+    $(LOCAL_PATH)/configs/ecc_list.xml:system/etc/ecc_list.xml \
+    $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
+
 # MTK Helpers 
 PRODUCT_PACKAGES += \
    libccci_util   \
@@ -408,6 +421,36 @@ PRODUCT_PACKAGES += \
     EngineerMode \
     libm4u \
     libbwc
+
+# Init
+PRODUCT_PACKAGES += \
+    hermes
+
+# Gralloc
+PRODUCT_PACKAGES += \
+    libgralloc_extra
+
+# Ifaddrs
+PRODUCT_PACKAGES += \
+    libifaddrs
+
+PRODUCT_COPY_FILES += \
+    prebuilts/ndk/current/sources/cxx-stl/stlport/libs/armeabi-v7a/libstlport_shared.so:system/lib/libstlport.so \
+    prebuilts/ndk/current/sources/cxx-stl/stlport/libs/arm64-v8a/libstlport_shared.so:system/lib64/libstlport.so
+
+# FM Radio
+PRODUCT_PACKAGES += \
+    FMRadio \
+    libfmjni \
+    libfmmt6620 \
+    libfmmt6628 \
+    libfmmt6627 \
+    libfmmt6630 \
+    libfmcust \
+    libmtkplayer
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/platform.xml:system/etc/permissions/platform.xml
 
 # Include explicitly to work around Facelock issues
 PRODUCT_PACKAGES += libprotobuf-cpp-full

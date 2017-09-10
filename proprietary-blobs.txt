@@ -7,7 +7,6 @@ bin/grep
 bin/ipod
 bin/make_f2fs
 bin/mtkmal
-bin/program_binary_service
 bin/resize_ext4
 bin/sink
 bin/slpd
@@ -36,7 +35,6 @@ bin/atcid
 bin/audiocmdservice_atci
 bin/autokd
 bin/badblocks
-#bin/batterywarning
 bin/evi
 bin/factory
 bin/fotabinder
@@ -370,7 +368,6 @@ lib/libjni_pq.so
 lib/libjni_resource_drm.so
 lib/libjtranscode.so
 lib/libm.so
-lib/libm4u.so
 lib/libmatv_cust.so
 lib/libmdloggerrecycle.so
 lib/libmediatek_exceptionlog.so
@@ -396,7 +393,7 @@ lib/libmtk_mmutils.so
 lib/libmtkbtextspp.so
 lib/libmtkjpeg.so
 lib/libmtklimiter.so
-lib/libmtkplayer.so
+#lib/libmtkplayer.so
 lib/libmtkshifter.so
 lib/libn3d3a.so
 lib/libnativecheck-jni.so
@@ -767,19 +764,13 @@ vendor/lib64/mediadrm/libmockdrmcryptoplugin.so
 xbin/BGW
 xbin/mnld
 ###################FINGER####################################################
-bin/goodixfingerprintd
 bin/mcDriverDaemon
-bin/fingerprintd
-lib/hw/fingerprint.default.so
-lib64/hw/fingerprint.default.so
 lib/libgf_algo.so
 lib/libgf_ca.so
 lib/libgf_hal.so
-lib/libgoodixfingerprint_binder.so
 lib64/libgf_algo.so
 lib64/libgf_ca.so
 lib64/libgf_hal.so
-lib64/libgoodixfingerprint_binder.so
 lib64/libMcClient.so
 lib64/libMcRegistry.so
 lib/libMcClient.so
@@ -866,10 +857,6 @@ lib/libmedia.so
 lib64/libmedia.so
 vendor/lib/drm/libdrmclearkeyplugin.so
 vendor/lib64/drm/libdrmclearkeyplugin.so
-app/LetvRemoteControl_preinstall/LetvRemoteControl_preinstall.apk
-app/LetvRemoteControl_preinstall/lib/arm/libbvfixed.so
-app/LetvRemoteControl_preinstall/lib/arm/libyzs_usc.so
-app/UEIQuicksetSDKLeTV/UEIQuicksetSDKLeTV.apk
 lib64/hw/keystore.mt6795.so
 lib/hw/keystore.mt6795.so
 lib/libdlna.so
