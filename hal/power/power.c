@@ -100,7 +100,7 @@ void set_feature(struct power_module *module, feature_t feature, int state)
         power_fwrite(TAP_TO_WAKE_NODE, tmp_str);
         return;
     }
-#endif+    ALOGI("MTK power HAL initing.");
+#endif
 }
 
 static int power_open(const hw_module_t* module, const char* name,
