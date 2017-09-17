@@ -42,9 +42,7 @@ LOCAL_SRC_FILES := bwc_test.cpp \
 LOCAL_MODULE := bwc_test
 
 LOCAL_C_INCLUDES:= \
-	$(LOCAL_PATH)/inc \
-	/inc
-
+	$(LOCAL_PATH)/inc
   
 LOCAL_SHARED_LIBRARIES := \
   libcutils \

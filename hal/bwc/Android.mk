@@ -70,7 +70,6 @@ LOCAL_SRC_FILES:= \
     
 
 LOCAL_C_INCLUDES:= \
-/inc 
   #$(TOP)/frameworks/base/include/ \
   #$(MTK_PATH_SOURCE)/hardware/bwc/inc \
   #$(TOP)/$(MTK_PATH_PLATFORM)/kernel/core/include/mach \
