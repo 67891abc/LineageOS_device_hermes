@@ -20,27 +20,7 @@ on post-fs-data
     mknod /dev/wmtWifi c 153 0
     chmod 0660 /dev/wmtWifi
     chown system system /dev/wmtWifi
-#Camera
-    chmod 0660 /dev/GAF001AF
-    chown system camera /dev/GAF001AF
-   
-    chmod 0660 /dev/DW9714AF
-    chown system camera /dev/DW9714AF
-    
-    chmod 0660 /dev/DW9761BAF
-    chown system camera /dev/DW9761BAF
 
-    chmod 0660 /dev/AD5820AF
-    chown system camera /dev/AD5820AF
-    
-    chmod 0660 /dev/BU64745GWZAF
-    chown system camera /dev/BU64745GWZAF
-    
-    chmod 0660 /dev/LC898212AF
-    chown system camera /dev/LC898212AF
-
-    chmod 0660 /dev/LC898122AF
-    chown system camera /dev/LC898122AF
 # BT
     chmod 0660 /dev/stpbt
     chown bluetooth radio /dev/stpbt
@@ -59,6 +39,30 @@ on post-fs-data
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wpa_supplicant 0770 wifi wifi
     chown wifi wifi /data/misc/wifi
+#Camera
+    chmod 0660 /dev/GAF001AF
+    chown system camera /dev/GAF001AF
+   
+    chmod 0660 /dev/DW9714AF
+    chown system camera /dev/DW9714AF
+    
+    chmod 0660 /dev/DW9761BAF
+    chown system camera /dev/DW9761BAF
+
+    chmod 0660 /dev/BU6429AF
+    chown system camera /dev/BU6429AF
+    
+    chmod 0660 /dev/AD5820AF
+    chown system camera /dev/AD5820AF
+    
+    chmod 0660 /dev/BU64745GWZAF
+    chown system camera /dev/BU64745GWZAF
+    
+    chmod 0660 /dev/LC898212AF
+    chown system camera /dev/LC898212AF
+
+    chmod 0660 /dev/LC898122AF
+    chown system camera /dev/LC898122AF
 
 # FM Radio device node
     mknod /dev/fm     c 193 0;
@@ -75,12 +79,12 @@ on boot
 #
 # Connectivity related services (Begin)
 #
-service wmt_loader /system/bin/wmt_loader
+service wmt_loader /vendor/bin/wmt_loader
 	user root
 	group root
 	oneshot
 
-service 66xx_launcher /system/bin/6620_launcher -m 4 -p /system/etc/firmware/
+service 66xx_launcher /vendor/bin/6620_launcher -m 4 -p /system/etc/firmware/
     user system
     group system
 

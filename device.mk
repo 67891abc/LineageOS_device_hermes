@@ -16,7 +16,7 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui
 $(call inherit-product, device/common/gps/gps_us_supl.mk) 
 
 # Vendor
-$(call inherit-product, vendor/xiaomi/hermes/hermes-vendor-blobs.mk)
+$(call inherit-product, vendor/xiaomi/hermes/hermes-vendor.mk)
 
 # Overlay Folder
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -30,6 +30,17 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Recovery allowed devices
 TARGET_OTA_ASSERT_DEVICE := hermes,Redmi Note 2
+
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+    LOCAL_KERNEL := device/xiaomi/hermes/kernel/Image.gz-dtb
+else
+    LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
+endif
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_KERNEL):kernel
+
+PRODUCT_SHIPPING_API_LEVEL := 21
 
 # Power
 PRODUCT_PACKAGES += \
@@ -58,7 +69,6 @@ PRODUCT_PACKAGES += \
 # Other
 PRODUCT_PACKAGES += \
     librs_jni \
-    libnl_2 \
     com.android.future.usb.accessory
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -195,24 +205,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 # Var patch
-ifneq ($(TARGET_BUILD_VARIANT),user,userdebug,eng)
-  ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
-  ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=1
-endif
+#ifneq ($(TARGET_BUILD_VARIANT),user,userdebug,eng)
+#  ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
+#  ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=1
+#endif
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ramdisk/enableswap.sh:root/enableswap.sh \
     $(LOCAL_PATH)/ramdisk/factory_init.project.rc:root/factory_init.project.rc \
     $(LOCAL_PATH)/ramdisk/factory_init.rc:root/factory_init.rc \
     $(LOCAL_PATH)/ramdisk/fstab.mt6795:root/fstab.mt6795 \
+    $(LOCAL_PATH)/ramdisk/fstab.charger:root/fstab.charger \
     $(LOCAL_PATH)/ramdisk/init.modem.rc:root/init.modem.rc \
     $(LOCAL_PATH)/ramdisk/init.mt6795.rc:root/init.mt6795.rc \
     $(LOCAL_PATH)/ramdisk/init.mt6795.usb.rc:root/init.mt6795.usb.rc \
     $(LOCAL_PATH)/ramdisk/init.project.rc:root/init.project.rc \
     $(LOCAL_PATH)/ramdisk/ueventd.mt6795.rc:root/ueventd.mt6795.rc \
+    $(LOCAL_PATH)/ramdisk/init.ssd.rc:root/init.ssd.rc \
     $(LOCAL_PATH)/ramdisk/init.mal.rc:root/init.mal.rc \
-    $(LOCAL_PATH)/ramdisk/init.usb.configfs:root/init.usb.configfs.rc \
-    $(LOCAL_PATH)/ramdisk/init.trustonic.rc:root/init.trustonic.rc \
+    $(LOCAL_PATH)/ramdisk/init.usb.configfs:root/init.usb.configfs.rc
 
 
 PRODUCT_COPY_FILES += \
@@ -220,7 +231,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-    device/xiaomi/hermes/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
+    device/xiaomi/hermes/configs/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
@@ -275,9 +286,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml 
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf
+    $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/bluetooth/auto_pair_blacklist.conf:system/etc/bluetooth/auto_pair_blacklist.conf \
@@ -301,12 +312,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/ril_conf/spn-conf.xml:system/etc/spn-conf.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/.tp/thermal.conf:system/etc/.tp/thermal.conf \
-    $(LOCAL_PATH)/configs/.tp/thermal.off.conf:system/etc/.tp/thermal.off.conf \
-    $(LOCAL_PATH)/configs/.tp/.ht120.mtc:system/etc/.tp/.ht120.mtc \
-    $(LOCAL_PATH)/configs/.tp/.thermal_policy_00:system/etc/.tp/.thermal_policy_00 \
-    $(LOCAL_PATH)/configs/.tp/.thermal_policy_game_01:system/etc/.tp/.thermal_policy_game_01 \
-    $(LOCAL_PATH)/configs/.tp/.thermal_policy_01:system/etc/.tp/.thermal_policy_01
+    $(LOCAL_PATH)/configs/.tp/thermal.conf:system/vendor/etc/.tp/thermal.conf \
+    $(LOCAL_PATH)/configs/.tp/thermal.off.conf:system/vendor/etc/.tp/thermal.off.conf \
+    $(LOCAL_PATH)/configs/.tp/.ht120.mtc:system/vendor/etc/.tp/.ht120.mtc \
+    $(LOCAL_PATH)/configs/.tp/.thermal_policy_00:system/vendor/etc/.tp/.thermal_policy_00 \
+    $(LOCAL_PATH)/configs/.tp/.thermal_policy_game_01:system/vendor/etc/.tp/.thermal_policy_game_01 \
+    $(LOCAL_PATH)/configs/.tp/.thermal_policy_01:system/vendor/etc/.tp/.thermal_policy_01
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/dhcpcd/dhcpcd-run-hooks:system/etc/dhcpcd/dhcpcd-run-hooks \
@@ -324,11 +335,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/slp_conf:system/etc/slp_conf \
     $(LOCAL_PATH)/configs/clatd.conf:system/etc/clatd.conf \
-    $(LOCAL_PATH)/configs/custom.conf:system/etc/custom.conf \
-    $(LOCAL_PATH)/configs/mtklog-config.prop:system/etc/mtklog-config.prop \
-    $(LOCAL_PATH)/configs/mtk_omx_core.cfg:system/etc/mtk_omx_core.cfg \
     $(LOCAL_PATH)/configs/perfservboosttbl.txt:system/etc/perfservboosttbl.txt \
-    $(LOCAL_PATH)/configs/perfservscntbl.txt:system/etc/perfservscntbl.txt
+    $(LOCAL_PATH)/configs/perfservscntbl.txt:system/vendor/etc/perfservscntbl.txt
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml    
@@ -353,7 +361,7 @@ LINKER_FORCED_SHIM_LIBS := /system/lib/liblog.so|libmtkshim_log.so:/system/lib64
 LINKER_FORCED_SHIM_LIBS := $(LINKER_FORCED_SHIM_LIBS):/system/lib/hw/audio.primary.$(TARGET_BOARD_PLATFORM).so|libmtkshim_audio.so
 LINKER_FORCED_SHIM_LIBS := $(LINKER_FORCED_SHIM_LIBS):/system/lib/libui.so|libmtkshim_ui.so:/system/lib64/libui.so|libmtkshim_ui.so
 LINKER_FORCED_SHIM_LIBS := $(LINKER_FORCED_SHIM_LIBS):/system/lib/libMtkOmxVdec.so|libmtkshim_omx.so
-LINKER_FORCED_SHIM_LIBS := $(LINKER_FORCED_SHIM_LIBS):/system/bin/mtk_agpsd|libmtkshim_gps.so
+LINKER_FORCED_SHIM_LIBS := $(LINKER_FORCED_SHIM_LIBS):/system/vendor/bin/mtk_agpsd|libmtkshim_gps.so
 
 # Sensor Calibration
 PRODUCT_PACKAGES += libem_sensor_jni
@@ -380,7 +388,8 @@ PRODUCT_PACKAGES += \
 
 # Default OMX service to non-Treble
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.media.treble_omx=false
+    persist.media.treble_omx=false \
+    camera.disable_treble=true
 
 # Limit dex2oat threads to improve thermals
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -413,12 +422,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/etc/init/mediaserver.rc:system/etc/init/mediaserver.rc 
     
-# camera legacy
 PRODUCT_PACKAGES += \
-    fs_config_files
-    
-PRODUCT_PACKAGES += \
-    EngineerMode \
     libm4u \
     libbwc
 
@@ -441,16 +445,26 @@ PRODUCT_COPY_FILES += \
 # FM Radio
 PRODUCT_PACKAGES += \
     FMRadio \
-    libfmjni \
-    libfmmt6620 \
-    libfmmt6628 \
-    libfmmt6627 \
-    libfmmt6630 \
-    libfmcust \
-    libmtkplayer
+    libfmjni
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/platform.xml:system/etc/permissions/platform.xml
 
 # Include explicitly to work around Facelock issues
 PRODUCT_PACKAGES += libprotobuf-cpp-full
+
+# For Google
+PRODUCT_PROPERTY_OVERRIDES += \
+    keyguard.no_require_sim=true \
+    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
+    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
+    ro.com.google.clientidbase=android-google \
+    ro.com.android.wifi-watchlist=GoogleGuest \
+    ro.error.receiver.system.apps=com.google.android.gms \
+    ro.setupwizard.enterprise_mode=1 \
+    ro.com.android.dataroaming=false \
+    net.tethering.noprovisioning=true \
+    ro.setupwizard.rotation_locked=true
+
+# AOSP Common
+$(call inherit-product, vendor/aosp/config.mk)

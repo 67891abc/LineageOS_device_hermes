@@ -21,7 +21,7 @@ LOCAL_SRC_FILES := \
         dbg.c
 
 LOCAL_C_INCLUDES += \
-        device/oneplus/onyx/nl_2/headers
+        device/xiaomi/hermes/libs/nl_2/headers
 
 # Static Library
 LOCAL_MODULE := libnl_2

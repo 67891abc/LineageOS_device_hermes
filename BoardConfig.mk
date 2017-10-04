@@ -9,7 +9,7 @@ USE_CAMERA_STUB := true
 
 ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_NO_BOOTLOADER := true
-#TARGET_NO_FACTORYIMAGE := true
+TARGET_NO_FACTORYIMAGE := true
 
 TARGET_BOARD_PLATFORM := mt6795
 
@@ -45,7 +45,7 @@ TARGET_BOOTLOADER_BOARD_NAME := mt6795
 
 # EXT4
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
+#TARGET_USERIMAGES_USE_F2FS := true
 
 # MTK Hardware
 BOARD_HAS_MTK_HARDWARE := true
@@ -60,7 +60,7 @@ BOARD_DISABLE_HW_ID_MATCH_CHECK := true;
 # Kernel
 TARGET_USES_64_BIT_BINDER := true
 TARGET_IS_64_BIT := true
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive androidboot.verifiedbootstate=green
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := \
@@ -77,9 +77,10 @@ BOARD_MKBOOTIMG_ARGS := \
 
 #source
 TARGET_KERNEL_SOURCE := kernel/xiaomi/hermes
-TARGET_KERNEL_CONFIG := x500_defconfig
+TARGET_KERNEL_CONFIG := hermes_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+PRODUCT_VENDOR_KERNEL_HEADERS :=  $(LOCAL_PATH)/kernel-headers
 
 # build old-style zip files (required for ota updater)
 BLOCK_BASED_OTA := false
@@ -123,15 +124,36 @@ USE_XML_AUDIO_POLICY_CONF := 1
 # RIL
 BOARD_RIL_CLASS := ../../../device/xiaomi/hermes/ril
 BOARD_CONNECTIVITY_MODULE := conn_soc
+MTK_DT_SUPPORT := no
+MTK_VT3G324M_SUPPORT := no
+MTK_SHARE_MODEM_CURRENT := 1
+MTK_SHARE_MODEM_SUPPORT := 2
+MTK_IPV6_SUPPORT := yes
+MTK_LTE_SUPPORT := yes
+MTK_LTE_DC_SUPPORT := no
+MTK_SVLTE_SUPPORT := no
+MTK_EAP_SIM_AKA := yes
+MTK_IRAT_SUPPORT := no
+MTK_DTAG_DUAL_APN_SUPPORT := no
+MTK_MD1_SUPPORT := 5
+MTK_MD2_SUPPORT := 4
+MTK_MD3_SUPPORT := 2
+MTK_MD5_SUPPORT := 5
+MTK_ENABLE_MD1 = yes
+MTK_ENABLE_MD2 = no
+MTK_ENABLE_MD3 = no
+MTK_ENABLE_MD5 = no
 
-# Display
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
-TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
+# Irda
+MTK_IRTX_SUPPORT := true
+
+# FM
+MTK_FM_SUPPORT := yes
+MTK_FM_RX_SUPPORT := yes
 
 # CMHW
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw
+#BOARD_USES_CYANOGEN_HARDWARE := true
+#BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw
 #TARGET_TAP_TO_WAKE_NODE := "/sys/devices/bus.2/11009000.I2C2/i2c-2/2-004b/input/input4/wake_gesture"
 
 # Wifi
@@ -173,40 +195,11 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/class/android_usb/android0/f_mass_storag
 
 BOARD_HAS_NO_SELECT_BUTTON := true
 
-# TWRP stuff
-ifeq ($(RECOVERY_VARIANT), twrp)
-BOARD_SUPPRESS_SECURE_ERASE := true
-TW_INCLUDE_CRYPTO := true
-TW_NO_REBOOT_BOOTLOADER := true
-TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
-
-TW_USE_TOOLBOX := true
-BOARD_USE_FRAMEBUFFER_ALPHA_CHANNEL := true
-TARGET_DISABLE_TRIPLE_BUFFERING := false
-DEVICE_RESOLUTION := 1080x1920
-DEVICE_SCREEN_WIDTH := 1080
-DEVICE_SCREEN_HEIGHT := 1920
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
-TW_MAX_BRIGHTNESS := 255
-TW_THEME := portrait_hdpi
-
-TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
-TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone1/temp
-TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/leds/lcd-backlight/brightness\"
-
-RECOVERY_SDCARD_ON_DATA := true
-TW_NO_USB_STORAGE := true
-TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
-
-else
 # CWM
 BOARD_RECOVERY_SWIPE := true
 BOARD_SUPPRESS_EMMC_WIPE := true
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
-endif
 
 # system.prop
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
@@ -240,22 +233,12 @@ MALLOC_SVELTE := true
 BOARD_GLOBAL_CFLAGS += -DDECAY_TIME_DEFAULT=0
 #BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
-# For Google
-PRODUCT_PROPERTY_OVERRIDES += \
-keyguard.no_require_sim=true \
-ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
-ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
-ro.com.google.clientidbase=android-google \
-ro.com.android.wifi-watchlist=GoogleGuest \
-ro.error.receiver.system.apps=com.google.android.gms \
-ro.setupwizard.enterprise_mode=1 \
-ro.com.android.dataroaming=false \
-net.tethering.noprovisioning=true \
-ro.setupwizard.rotation_locked=true
-
 # For MTK New Symbols
 TARGET_INCLUDE_XLOG_SYMBOLS := true
 TARGET_INCLUDE_AUDIO_SYMBOLS := true
 TARGET_INCLUDE_GPS_SYMBOLS := true
 TARGET_INCLUDE_UI_SYMBOLS := true
 TARGET_INCLUDE_OMX_SYMBOLS := true
+
+# Dex-preoptimization
+WITH_DEXPREOPT := false

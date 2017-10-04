@@ -44,6 +44,7 @@ LOCAL_SRC_FILES := \
 	gscan.cpp
 
 LOCAL_MODULE := libwifi-hal-mt66xx
+LOCAL_PROPRIETARY_MODULE := true
 
 include $(BUILD_STATIC_LIBRARY)
 

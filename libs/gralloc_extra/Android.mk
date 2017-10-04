@@ -13,11 +13,13 @@ LOCAL_C_INCLUDES := \
 LOCAL_SHARED_LIBRARIES := \
 	libhardware \
 	libcutils \
-	libutils
+	libutils \
+        liblog
 
 LOCAL_EXPORT_C_INCLUDE_DIRS := \
 	$(LOCAL_PATH)/include
 
 LOCAL_MODULE := libgralloc_extra
+LOCAL_PROPRIETARY_MODULE := true
 
 include $(BUILD_SHARED_LIBRARY)
