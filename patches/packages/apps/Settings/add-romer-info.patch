@@ -38,7 +38,7 @@ index 1b594ef..80f4f6d 100644
 +	<!-- Romer Info -->
 +        <Preference android:key="romer_info"
 +                android:title="@string/romer_info"
-+                android:summary="@string/romer_info_default" />
++                android:summary="@string/romer_info_default">
 +		<intent android:action="android.intent.action.VIEW"
 +                        android:data="https://weibo.com/u/3516970894/" />
 +        </Preference>
